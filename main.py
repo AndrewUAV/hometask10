@@ -1,20 +1,5 @@
 from collections import UserDict
 
-
-def input_error(func):
-    def inner(*args):
-        try:
-            return func(*args)
-        except IndexError:
-            return "Not enough params"
-        except KeyError:
-            return f"There is no contact such in phone book."
-        except ValueError:
-            return "Not enough params or wrong phone format"
-
-    return inner
-
-
 class Field:
     def __init__(self, value):
         self.value = value
@@ -91,6 +76,20 @@ class AddressBook(UserDict):
 
     def __str__(self) -> str:
         return "\n".join(str(r) for r in self.data.values())
+
+def input_error(func):
+    def inner(*args):
+        try:
+            return func(*args)
+        except IndexError:
+            return "Not enough params"
+        except KeyError:
+            return f"There is no contact such in phone book."
+        except ValueError:
+            return "Not enough params or wrong phone format"
+
+    return inner
+    
 @input_error
 def func_help():
     return ('Hi! If you want to start working, just enter "hello"\n' +
@@ -103,6 +102,7 @@ def func_help():
             '"show all" - for show all information\n' +
             '"good bye", "close", "exit" - for end work\n'+
             '"del" - delete info of name')
+
 @input_error
 def parser(user_input: str):
     COMMANDS = {
@@ -121,7 +121,6 @@ def parser(user_input: str):
             return command, user_input[len(kw):].strip().split()
     return func_unknown_command, []
 
-
 @input_error
 def func_add(*args):
     name = args[0]
@@ -131,7 +130,6 @@ def func_add(*args):
         record.add_phone(phone_number)
     address_book.add_record(record)
     return "Info saved successfully."
-
 
 @input_error
 def func_change(*args):
@@ -145,13 +143,11 @@ def func_change(*args):
     else:
         raise KeyError
 
-
 @input_error
 def func_delete(*args):
     name = args[0]
     address_book.delete(name)
     return f"User {name} has been deleted from the phone book"
-
 
 @input_error
 def func_search(*args):
@@ -161,7 +157,6 @@ def func_search(*args):
         return str(record)
     else:
         raise KeyError
-
 
 @input_error
 def func_show_all(*args):
